@@ -1,0 +1,10 @@
+.DS_Store
+npm-debug.log
+node_modules
+.sass-cache
+*.css.map
+.cache
+vendor
+.env
+.idea/*
+ftpsync.settings
