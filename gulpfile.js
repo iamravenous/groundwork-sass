@@ -3,6 +3,7 @@
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 const autoprefixer = require('autoprefixer');
+const browserSync = require('browser-sync');
 const del = require('del');
 
 
@@ -39,6 +40,21 @@ const processors = [
   autoprefixer({browsers: ['last 2 versions']})
 ];
 
+// Configure static server with BrowserSync
+gulp.task('browser-sync', () => {
+    browserSync.init({
+        server: {
+            baseDir: "./src/",
+            browser: ['google chrome']
+        }
+    });
+});
+
+// Reload browser
+gulp.task('bs-reload', () => {
+  browserSync.reload();
+});
+
 // Compile Sass in development environment with Sourcemaps
 gulp.task('sass', () => {
   let onError = (err) => {
@@ -47,7 +63,6 @@ gulp.task('sass', () => {
       subtitle: 'Ups! Sass build failed 😱',
       message: 'Error: <%= error.message %>'
     })(err);
-    this.emit('end');
   };
 
   return gulp.src(paths.scss.src)
@@ -57,6 +72,7 @@ gulp.task('sass', () => {
   .pipe($.postcss(processors))
   .pipe($.sourcemaps.write('.'))
   .pipe(gulp.dest(paths.css.base))
+  .pipe(browserSync.stream())
   .pipe($.plumber.stop())
   .pipe($.notify({
     title: 'Gulp Sass',
@@ -83,7 +99,6 @@ gulp.task('styles', () => {
       subtitle: 'Ups! Sass build failed 😱',
       message: 'Error: <%= error.message %>'
     })(err);
-    this.emit('end');
   };
 
   return gulp.src(paths.scss.src)
@@ -109,6 +124,7 @@ gulp.task('styles', () => {
 gulp.task('build', ['clean', 'copy', 'styles']);
 
 // Watch sass files for changes
-gulp.task('default', () => {
+gulp.task('default', ['browser-sync'], () => {
   gulp.watch('src/**/*.scss', ['sass']);
+  gulp.watch('src/*.html', ['bs-reload']);
 });
