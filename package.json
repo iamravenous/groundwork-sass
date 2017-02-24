@@ -1,7 +1,7 @@
 {
   "name": "starter-pack-lite",
-  "version": "1.0.0",
-  "description": "Lite boilerplate to start projects",
+  "version": "1.0.1",
+  "description": "Lite boilerplate to start projects with Sass",
   "scripts": {
     "start": "gulp"
   },
