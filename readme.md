@@ -1,4 +1,4 @@
-# Starter Pack Lite
+# Groundwork Lite
 Lite boilerplate to start projects with [**Sass**](http://sass-lang.com/).
 >[**How to use it!**](#usage)
 
