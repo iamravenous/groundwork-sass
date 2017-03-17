@@ -57,12 +57,13 @@ gulp.task('bs-reload', () => {
 
 // Compile Sass in development environment with Sourcemaps
 gulp.task('sass', () => {
-  let onError = (err) => {
+  function onError(err) {
     $.notify.onError({
-      title: 'Gulp Sass',
+      title: 'Groundwork Lite',
       subtitle: 'Ups! Sass build failed 😱',
       message: 'Error: <%= error.message %>'
     })(err);
+    this.emit('end');
   };
 
   return gulp.src(paths.scss.src)
@@ -75,8 +76,9 @@ gulp.task('sass', () => {
   .pipe(browserSync.stream())
   .pipe($.plumber.stop())
   .pipe($.notify({
-    title: 'Gulp Sass',
-    subtitle: '👌 Yeah! Sass compiled without problems~',
+    title: 'Groundwork Lite',
+    message: 'Yeah! Sass compiled without problems 👌',
+    onLast: true
   }))
 });
 
@@ -93,12 +95,13 @@ gulp.task('copy', () => {
 
 // Stylesheets for production environment with minified version
 gulp.task('styles', () => {
-  let onError = (err) => {
+  function onError(err) {
     $.notify.onError({
-      title: 'Gulp Sass',
+      title: 'Groundwork Lite',
       subtitle: 'Ups! Sass build failed 😱',
       message: 'Error: <%= error.message %>'
     })(err);
+    this.emit('end');
   };
 
   return gulp.src(paths.scss.src)
@@ -116,7 +119,8 @@ gulp.task('styles', () => {
   .pipe($.plumber.stop())
   .pipe($.notify({
     title: 'Gulp Styles',
-    subtitle: '👌 Yeah! Stylesheets created without problems~',
+    message: 'Yeah! Stylesheets created without problems 👌',
+    onLast: true
   }))
 });
 
@@ -125,6 +129,6 @@ gulp.task('build', ['clean', 'copy', 'styles']);
 
 // Watch sass files for changes
 gulp.task('default', ['browser-sync'], () => {
-  gulp.watch('src/**/*.scss', ['sass']);
-  gulp.watch('src/*.html', ['bs-reload']);
+  gulp.watch(base.src + '**/*.scss', ['sass']);
+  gulp.watch(base.src + '*.html', ['bs-reload']);
 });
