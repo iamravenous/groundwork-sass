@@ -1,6 +1,6 @@
 {
-  "name": "starter-pack-lite",
-  "version": "1.0.1",
+  "name": "groundwork-lite",
+  "version": "1.0.2",
   "description": "Lite boilerplate to start projects with Sass",
   "scripts": {
     "start": "gulp"
@@ -8,7 +8,7 @@
   "author": "Franco Moya <hello@ravenous.io>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/iamravenous/starter-pack-lite.git"
+    "url": "git://github.com/iamravenous/groundwork-lite.git"
   },
   "license": "MIT",
   "devDependencies": {
@@ -23,6 +23,6 @@
     "gulp-postcss": "^6.3.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.4.1",
+    "gulp-sourcemaps": "^2.4.1"
   }
 }
