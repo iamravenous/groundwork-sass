@@ -1,6 +1,6 @@
 {
-  "name": "groundwork-lite",
-  "version": "1.0.2",
+  "name": "groundwork-sass",
+  "version": "1.0.0",
   "description": "Lite boilerplate to start projects with Sass",
   "scripts": {
     "start": "gulp"
@@ -8,13 +8,11 @@
   "author": "Franco Moya <hello@ravenous.io>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/iamravenous/groundwork-lite.git"
+    "url": "git://github.com/iamravenous/groundwork-sass.git"
   },
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^6.7.5",
-    "browser-sync": "^2.18.8",
-    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-cssnano": "^2.1.2",
     "gulp-load-plugins": "^1.5.0",

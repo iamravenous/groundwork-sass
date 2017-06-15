@@ -3,36 +3,16 @@
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 const autoprefixer = require('autoprefixer');
-const browserSync = require('browser-sync');
-const del = require('del');
-
-
-const base = {
-  src: './src/',
-  dist: './dist/'
-};
 
 const paths = {
   scss: {
-    src: 'src/assets/scss/*.scss',
+    base: 'assets/scss/**/*.scss',
+    src: 'assets/scss/*.scss',
   },
   css: {
-    base: 'src/assets/css',
-    src: ['src/assets/css/*.css', '!src/assets/css/*.min.css'],
-    dist: 'dist/assets/css',
+    base: 'assets/css',
+    src: ['assets/css/*.css', '!assets/css/*.min.css'],
   },
-  images: {
-    src: 'src/assets/images/*',
-    dist: 'dist/assets/images/'
-  },
-  copy: {
-    src: [
-      'src/*.html',
-      'src/assets/js/**/*',
-      'src/assets/images/**/*',
-      'src/assets/fonts/**/*'
-    ]
-  }
 }
 
 // Scope of browsers to be supported
@@ -40,26 +20,11 @@ const processors = [
   autoprefixer({browsers: ['last 2 versions']})
 ];
 
-// Configure static server with BrowserSync
-gulp.task('browser-sync', () => {
-    browserSync.init({
-        server: {
-            baseDir: "./src/",
-            browser: ['google chrome']
-        }
-    });
-});
-
-// Reload browser
-gulp.task('bs-reload', () => {
-  browserSync.reload();
-});
-
-// Compile Sass in development environment with Sourcemaps
-gulp.task('sass', () => {
+// Compile Sass with Sourcemaps
+gulp.task('compile', () => {
   function onError(err) {
     $.notify.onError({
-      title: 'Groundwork Lite',
+      title: 'Groundwork Sass',
       subtitle: 'Ups! Sass build failed 😱',
       message: 'Error: <%= error.message %>'
     })(err);
@@ -73,31 +38,19 @@ gulp.task('sass', () => {
   .pipe($.postcss(processors))
   .pipe($.sourcemaps.write('.'))
   .pipe(gulp.dest(paths.css.base))
-  .pipe(browserSync.stream())
   .pipe($.plumber.stop())
   .pipe($.notify({
-    title: 'Groundwork Lite',
+    title: 'Groundwork Sass',
     message: 'Yeah! Sass compiled without problems 👌',
     onLast: true
   }))
 });
 
-// Clean /dist directory
-gulp.task('clean', () => {
-  del(['dist/**/*']);
-});
-
-// Copy all other files and folders from /src to /dist
-gulp.task('copy', () => {
- return gulp.src(paths.copy.src, { base: 'src' })
- .pipe(gulp.dest(base.dist));
-});
-
-// Stylesheets for production environment with minified version
-gulp.task('styles', () => {
+// Compile Sass in a CSS minified version
+gulp.task('minify', () => {
   function onError(err) {
     $.notify.onError({
-      title: 'Groundwork Lite',
+      title: 'Groundwork Sass',
       subtitle: 'Ups! Sass build failed 😱',
       message: 'Error: <%= error.message %>'
     })(err);
@@ -108,27 +61,25 @@ gulp.task('styles', () => {
   .pipe($.plumber({errorHandler: onError}))
   .pipe($.sass({outputStyle: 'expanded'}))
   .pipe($.postcss(processors))
-  .pipe(gulp.dest(paths.css.dist))
   .pipe($.cssnano({
     discardUnused: {
       fontFace: false
     }
   }))
   .pipe($.rename({suffix: '.min'}))
-  .pipe(gulp.dest(paths.css.dist))
+  .pipe(gulp.dest(paths.css.base))
   .pipe($.plumber.stop())
   .pipe($.notify({
-    title: 'Gulp Styles',
-    message: 'Yeah! Stylesheets created without problems 👌',
+    title: 'Groundwork Sass',
+    message: 'Yeah! Minified version created without problems 👌',
     onLast: true
   }))
 });
 
-// Build /dist folder
-gulp.task('build', ['clean', 'copy', 'styles']);
+// Compile Sass to CSS and generate a minified version
+gulp.task('build', ['compile', 'minify']);
 
 // Watch sass files for changes
-gulp.task('default', ['browser-sync'], () => {
-  gulp.watch(base.src + '**/*.scss', ['sass']);
-  gulp.watch(base.src + '*.html', ['bs-reload']);
+gulp.task('default', () => {
+  gulp.watch(paths.scss.base, ['compile']);
 });
